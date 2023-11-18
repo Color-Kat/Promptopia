@@ -1,9 +1,13 @@
 import {FC, PropsWithChildren} from "react";
 import "@styles/globals.scss";
+import {Nav} from "@components/Nav";
 
-const Layout: FC<PropsWithChildren> = ({children}) => {
+export const metadata = {
+    title: "Promptopia",
+    description: "Discover & Share AI Prompts",
+}
 
-
+const RootLayout: FC<PropsWithChildren> = ({children}) => {
     return (
         <html lang="eng">
         <body>
@@ -13,6 +17,7 @@ const Layout: FC<PropsWithChildren> = ({children}) => {
         </div>
 
         <main className="app">
+            <Nav />
             {children}
         </main>
 
@@ -21,4 +26,4 @@ const Layout: FC<PropsWithChildren> = ({children}) => {
     );
 };
 
-export default Layout;
+export default RootLayout;
