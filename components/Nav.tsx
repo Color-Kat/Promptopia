@@ -4,14 +4,14 @@ import React, {memo, FC, useState, useEffect} from 'react';
 import {signIn, signOut, useSession, getProviders} from 'next-auth/react';
 import Link from "next/link";
 import Image from "next/image";
-import {Provider, ProviderType} from "@node_modules/next-auth/providers";
+import {Provider, ProviderType} from "next-auth/providers";
 
 interface NavProps {
 
 }
 
 export const Nav: FC<NavProps> = memo(({}) => {
-    const [isUserLoggedIn, setIsUserLoggedIn] = useState(true);
+    const {data: session} = useSession()
 
     const [providers, setProviders] = useState<null | Provider[]>(null);
     const [toggleDropdown, setToggleDropdown] = useState(false);
@@ -41,7 +41,7 @@ export const Nav: FC<NavProps> = memo(({}) => {
 
             {/*  Desktop Navigation  */}
             <div className="sm:flex hidden">
-                {isUserLoggedIn ? (
+                {session?.user ? (
                     <div className="flex gap-3 md:gap-5">
                         <Link
                             href="/create-prompt"
@@ -88,7 +88,7 @@ export const Nav: FC<NavProps> = memo(({}) => {
 
             {/*  Mobile Navigation  */}
             <div className="sm:hidden flex relative">
-                {isUserLoggedIn ? (
+                {session?.user ? (
                     <div className="flex">
                         <Image
                             src="/assets/images/logo.svg"
