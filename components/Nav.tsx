@@ -4,7 +4,6 @@ import React, {memo, FC, useState, useEffect} from 'react';
 import {signIn, signOut, useSession, getProviders} from 'next-auth/react';
 import Link from "next/link";
 import Image from "next/image";
-import {Provider, ProviderType} from "next-auth/providers";
 
 interface NavProps {
 
@@ -13,7 +12,7 @@ interface NavProps {
 export const Nav: FC<NavProps> = memo(({}) => {
     const {data: session} = useSession()
 
-    const [providers, setProviders] = useState<null | Provider[]>(null);
+    const [providers, setProviders] = useState<null | any[]>(null);
     const [toggleDropdown, setToggleDropdown] = useState(false);
 
     useEffect(() => {
@@ -60,7 +59,7 @@ export const Nav: FC<NavProps> = memo(({}) => {
 
                         <Link href="/profile">
                             <Image
-                                src="/assets/images/logo.svg"
+                                src={session?.user.image}
                                 width={37}
                                 height={37}
                                 alt="profile"
@@ -91,7 +90,7 @@ export const Nav: FC<NavProps> = memo(({}) => {
                 {session?.user ? (
                     <div className="flex">
                         <Image
-                            src="/assets/images/logo.svg"
+                            src={session?.user.image}
                             width={37}
                             height={37}
                             alt="profile"
