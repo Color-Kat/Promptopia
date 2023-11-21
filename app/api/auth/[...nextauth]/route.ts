@@ -31,12 +31,13 @@ const handler = NextAuth({
                     email: profile.email
                 });
 
-                if (!userExists)
+                if (!userExists) {
                     await User.create({
                         email: profile.email,
-                        name: profile.name.replace(" ", "").toLowerCase(),
-                        image: profile.image
-                    })
+                        username: profile.name.replace(" ", "").toLowerCase(),
+                        image: profile.picture
+                    });
+                }
 
                 return true;
             } catch (error) {
