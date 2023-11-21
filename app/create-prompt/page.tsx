@@ -6,10 +6,10 @@ import {Form} from "@components/Form";
 import {FormEvent, useState} from "react";
 import {IPost} from "@/types/IPost";
 import {useSession} from "next-auth/react";
-import {router} from "next/client";
 
 const CreatePrompt: NextPage = ({}) => {
     const {data: session} = useSession();
+    const router = useRouter();
 
     const [submitting, setSubmitting] = useState(false);
     const [post, setPost] = useState<IPost>({
