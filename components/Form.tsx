@@ -1,4 +1,4 @@
-import React, {memo, FC, Dispatch, SetStateAction} from 'react';
+import React, {memo, FC, Dispatch, SetStateAction, FormEvent} from 'react';
 import {IPost} from "@/types/IPost";
 import Link from "next/link";
 
@@ -7,7 +7,7 @@ interface FormProps {
     post: IPost;
     setPost: Dispatch<SetStateAction<IPost>>;
     submitting: boolean;
-    handleSubmit: () => void
+    handleSubmit: (e: FormEvent<HTMLFormElement>) => void
 
 }
 

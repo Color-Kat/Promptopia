@@ -3,18 +3,40 @@
 import {NextPage} from 'next';
 import {useRouter} from "next/navigation";
 import {Form} from "@components/Form";
-import {useState} from "react";
+import {FormEvent, useState} from "react";
 import {IPost} from "@/types/IPost";
+import {useSession} from "next-auth/react";
+import {router} from "next/client";
 
 const CreatePrompt: NextPage = ({}) => {
+    const {data: session} = useSession();
+
     const [submitting, setSubmitting] = useState(false);
     const [post, setPost] = useState<IPost>({
         prompt: "",
         tag: "",
     });
 
-    const createPrompt = async () => {
+    const createPrompt = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setSubmitting(true);
 
+        try {
+            const response = await fetch('/api/prompt/new', {
+                method: 'POST',
+                body: JSON.stringify({
+                    prompt: post.prompt,
+                    tag: post.tag,
+                    userId: session?.user.id
+                })
+            });
+
+            if(response.ok) router.push('/');
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setSubmitting(false);
+        }
     }
 
     return (
