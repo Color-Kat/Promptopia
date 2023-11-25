@@ -6,7 +6,7 @@ import Image from "next/image";
 
 interface PromptCardProps {
     post: IPost;
-    handleTagClick: (tag: string) => void;
+    handleTagClick?: (tag: string) => void;
     handleEdit?: () => void;
     handleDelete?: () => void;
 }
