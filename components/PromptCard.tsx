@@ -20,6 +20,13 @@ export const PromptCard: FC<PromptCardProps> = memo(({
 
     const [copied, setCopied] = useState('');
 
+    const handleCopy = () => {
+        setCopied(post.prompt);
+        navigator.clipboard.writeText(post.prompt);
+
+        setTimeout(() => setCopied(''), 2000);
+    }
+
     return (
         <div className="prompt_card">
             <div className="flex justify-between items-start gap-5">
@@ -46,13 +53,13 @@ export const PromptCard: FC<PromptCardProps> = memo(({
 
                 <div
                     className="copy_btn"
-                    onClick={() => {}}
+                    onClick={handleCopy}
                 >
                     <Image
                         src={copied === post.prompt ? '/assets/icons/tick.svg' : '/assets/icons/copy.svg'}
                         alt="Copy"
-                        width={12}
-                        height={12}
+                        width={17}
+                        height={17}
                     />
                 </div>
             </div>
