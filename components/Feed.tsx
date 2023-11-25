@@ -6,7 +6,7 @@ import {IPost} from "@/types/IPost";
 
 const PromptCardList: FC<{
     posts: IPost[],
-    handleTagClick: () => void
+    handleTagClick: (tag: string) => void
 }> = ({
           posts,
           handleTagClick
@@ -65,7 +65,7 @@ export const Feed: FC<FeedProps> = memo(({}) => {
 
             <PromptCardList
                 posts={posts}
-                handleTagClick={() => {
+                handleTagClick={(tag: string) => {
 
                 }}
             />
