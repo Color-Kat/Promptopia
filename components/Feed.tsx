@@ -1,8 +1,9 @@
 'use client';
 
-import React, {memo, FC, useState, ChangeEvent, useEffect} from 'react';
+import React, {memo, FC, useState, ChangeEvent, useEffect, useCallback} from 'react';
 import {PromptCard} from "@components/PromptCard";
 import {IPost} from "@/types/IPost";
+import {useRouter, useSearchParams} from "next/navigation";
 
 const PromptCardList: FC<{
     posts: IPost[]
@@ -26,12 +27,19 @@ interface FeedProps {
 }
 
 export const Feed: FC<FeedProps> = memo(({}) => {
+    const router = useRouter();
+    const searchParams = useSearchParams();
 
-    const [searchText, setSearchText] = useState('');
+    const [searchText, setSearchText] = useState(searchParams.get('search') ?? '');
     const [posts, setPosts] = useState([]);
 
     const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setSearchText(e.target.value);
 
+        const params = new URLSearchParams(searchParams); // take old search params
+        params.set('search', e.target.value); // and change value of the tag filter
+
+        router.push(`/?${params}`);
     }
 
     useEffect(() => {
@@ -57,6 +65,7 @@ export const Feed: FC<FeedProps> = memo(({}) => {
                     onChange={handleSearchChange}
                     required
                     className="search_input peer"
+                    autoFocus
                 />
             </form>
 
