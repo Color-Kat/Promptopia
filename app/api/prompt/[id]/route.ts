@@ -1,6 +1,7 @@
 import {connectToDB} from "@/utilsdatabase";
 import Prompt from "@models/prompt";
 import {NextApiHandler, NextApiRequest} from "next";
+import {getSession} from "next-auth/react";
 
 // GET (read)
 export const GET: NextApiHandler = async (
@@ -29,16 +30,19 @@ export const GET: NextApiHandler = async (
 
 // PATCH (update)
 export const PATCH: NextApiHandler = async (
-    request,
+    req,
 ) => {
-    const {prompt, tag} = await request.body.json();
+    const {prompt, tag} = await req.body.json();
 
     try {
         await connectToDB();
 
-        const existingPrompt = await Prompt.findById(
-            request.query.id
-        );
+        const session = await getSession({ req });
+
+        const existingPrompt = await Prompt.findOne({
+            id: req.query.id,
+            creator: session?.user?.id
+        });
 
         if(!existingPrompt) return new Response('Prompt not found', {status: 404});
 
@@ -54,11 +58,18 @@ export const PATCH: NextApiHandler = async (
 }
 
 // DELETE (delete)
-export const DELETE: NextApiHandler = async (request) => {
+export const DELETE: NextApiHandler = async (req) => {
     try {
         await connectToDB();
 
-        await Prompt.findByIdAndRemove(request.query.id);
+        // await Prompt.findByIdAndRemove(request.query.id);
+
+        const session = await getSession({ req });
+
+        await Prompt.find({
+            _id: req.query.id,
+            creator: session?.user?.id
+        });
 
         return new Response('Prompt deleted successfully', {status: 200});
     } catch (error) {
