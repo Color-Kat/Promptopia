@@ -1,10 +1,5 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
 import {connectToDB} from "@/utilsdatabase";
 import Prompt from "@models/prompt";
-
-type ResponseData = {
-
-}
 
 export const GET = async (
     request: Request
