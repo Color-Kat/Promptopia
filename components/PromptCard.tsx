@@ -5,6 +5,7 @@ import {IPost} from "@/types/IPost";
 import Image from "next/image";
 import {useSession} from "next-auth/react";
 import {usePathname} from "next/navigation";
+import Link from "next/link";
 
 interface PromptCardProps {
     post: IPost;
@@ -36,7 +37,10 @@ export const PromptCard: FC<PromptCardProps> = memo(({
         <div className="prompt_card">
             <div className="flex justify-between items-start gap-5">
                 {post.creator &&
-                    <div className="flex-1 flex justify-start items-center gap-3 cursor-pointer">
+                    <Link href={`/profile/${post.creator._id}`}>
+                    <div
+                        className="flex-1 flex justify-start items-center gap-3 cursor-pointer"
+                    >
                         <Image
                             src={post.creator.image}
                             alt="User_image"
@@ -54,6 +58,7 @@ export const PromptCard: FC<PromptCardProps> = memo(({
                             </p>
                         </div>
                     </div>
+                    </Link>
                 }
 
                 <div
