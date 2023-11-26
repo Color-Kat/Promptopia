@@ -12,7 +12,7 @@ const CreatePrompt: NextPage = ({}) => {
     const router = useRouter();
 
     const [submitting, setSubmitting] = useState(false);
-    const [post, setPost] = useState<IPost>({
+    const [post, setPost] = useState<Pick<IPost, 'prompt' | 'tag'>>({
         prompt: "",
         tag: "",
     });

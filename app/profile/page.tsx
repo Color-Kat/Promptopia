@@ -6,8 +6,10 @@ import {Profile} from "@components/Profile";
 import {useSession} from "next-auth/react";
 import {useEffect, useState} from "react";
 import {IPost} from "@/types/IPost";
+import {useRouter} from "next/navigation";
 
 const MyProfile: NextPage = ({}) => {
+    const router = useRouter();
 
     const {data: session} = useSession();
     const [posts, setPosts] = useState([]);
@@ -26,7 +28,7 @@ const MyProfile: NextPage = ({}) => {
     }, [session?.user.id]);
 
     const handleEdit = (post: IPost) => {
-
+        router.push(`/update-prompt?id=${post._id}`);
     }
 
     const handleDelete = (post: IPost) => {

@@ -3,9 +3,9 @@ import {IPost} from "@/types/IPost";
 import Link from "next/link";
 
 interface FormProps {
-    type: 'Create';
-    post: IPost;
-    setPost: Dispatch<SetStateAction<IPost>>;
+    type: 'Create' | 'Edit';
+    post: Pick<IPost, 'prompt' | 'tag'>;
+    setPost: Dispatch<SetStateAction<Pick<IPost, 'prompt' | 'tag'>>>;
     submitting: boolean;
     handleSubmit: (e: FormEvent<HTMLFormElement>) => void
 
