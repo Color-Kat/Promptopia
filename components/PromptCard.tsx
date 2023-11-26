@@ -1,25 +1,25 @@
 'use client';
 
-import React, {memo, FC, useState} from 'react';
+import React, {memo, FC, useState, useCallback} from 'react';
 import {IPost} from "@/types/IPost";
 import Image from "next/image";
 import {useSession} from "next-auth/react";
-import {usePathname} from "next/navigation";
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import Link from "next/link";
 
 interface PromptCardProps {
     post: IPost;
-    handleTagClick?: (tag: string) => void;
     handleEdit?: () => void;
     handleDelete?: () => void;
 }
 
 export const PromptCard: FC<PromptCardProps> = memo(({
                                                          post,
-                                                         handleTagClick,
                                                          handleEdit,
                                                          handleDelete
                                                      }) => {
+    const router = useRouter();
+    const searchParams = useSearchParams();
 
     const {data: session} = useSession();
     const pathname = usePathname();
@@ -32,6 +32,13 @@ export const PromptCard: FC<PromptCardProps> = memo(({
 
         setTimeout(() => setCopied(''), 2000);
     }
+
+    const handleTagClick = useCallback(() => {
+        const params = new URLSearchParams(searchParams); // take old search params
+        params.set('tag', post.tag); // and change value of the tag filter
+
+        router.push(`/?${params}`);
+    }, []);
 
     return (
         <div className="prompt_card">
@@ -80,11 +87,12 @@ export const PromptCard: FC<PromptCardProps> = memo(({
 
             <p
                 className="font-inter text-sm blue_gradient cursor-pointer"
-                onClick={() => handleTagClick && handleTagClick(post.tag)}
+                onClick={handleTagClick}
             >
                 #{post.tag}
             </p>
 
+            {/* User action buttons */}
             {session?.user.id === post.creator?._id && pathname == '/profile' &&(
                 <div className="mt-5 flex-center gap-4 border-t border-gray-200 pt-3">
                     <p

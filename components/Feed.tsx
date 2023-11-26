@@ -5,18 +5,15 @@ import {PromptCard} from "@components/PromptCard";
 import {IPost} from "@/types/IPost";
 
 const PromptCardList: FC<{
-    posts: IPost[],
-    handleTagClick: (tag: string) => void
+    posts: IPost[]
 }> = ({
-          posts,
-          handleTagClick
+          posts
       }) => {
     return (
         <div className="mt-16 prompt_layout">
             {posts.map(post => (
                 <PromptCard
                     post={post}
-                    handleTagClick={handleTagClick}
                     key={post._id}
                 />
             ))}
@@ -65,9 +62,6 @@ export const Feed: FC<FeedProps> = memo(({}) => {
 
             <PromptCardList
                 posts={posts}
-                handleTagClick={(tag: string) => {
-
-                }}
             />
         </section>
     );
