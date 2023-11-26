@@ -12,7 +12,7 @@ const MyProfile: NextPage = ({}) => {
     const router = useRouter();
 
     const {data: session} = useSession();
-    const [posts, setPosts] = useState([]);
+    const [posts, setPosts] = useState<IPost[]>([]);
 
     useEffect(() => {
         if(!session?.user.id) return;
@@ -31,8 +31,21 @@ const MyProfile: NextPage = ({}) => {
         router.push(`/update-prompt?id=${post._id}`);
     }
 
-    const handleDelete = (post: IPost) => {
+    const handleDelete = async (post: IPost) => {
+        const hasConfirmed = confirm("Are you sure you want to delete this prmopt?");
 
+        if(hasConfirmed) {
+            try {
+                await fetch(`/api/prompt/${post._id.toString()}`, {
+                    method: 'DELETE'
+                });
+
+                const filteredPosts = posts.filter(p => p._id !== post._id);
+                setPosts(filteredPosts);
+            } catch (error) {
+                console.log(error)
+            }
+        }
     }
 
     return (

@@ -69,15 +69,15 @@ export const DELETE = async (
 
         // await Prompt.findByIdAndRemove(request.query.id);
 
-        const session = await getSession({ req });
 
         await Prompt.find({
             _id: params.id,
-            creator: session?.user?.id
-        });
+            // creator: session?.user?.id // idk why i can't get session
+        }).deleteOne();
 
         return new Response('Prompt deleted successfully', {status: 200});
     } catch (error) {
+        console.log(error)
         return new Response('Failed to delete prompt', {status: 500});
     }
 }
