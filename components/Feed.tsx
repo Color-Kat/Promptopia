@@ -4,6 +4,7 @@ import React, {memo, FC, useState, ChangeEvent, useEffect, useCallback} from 're
 import {PromptCard} from "@components/PromptCard";
 import {IPost} from "@/types/IPost";
 import {useRouter, useSearchParams} from "next/navigation";
+import {useDebounce} from "@/hooks/useDebounce";
 
 const PromptCardList: FC<{
     posts: IPost[]
@@ -30,17 +31,21 @@ export const Feed: FC<FeedProps> = memo(({}) => {
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    const [searchText, setSearchText] = useState(searchParams.get('search') ?? '');
     const [posts, setPosts] = useState([]);
+
+    const [searchText, setSearchText] = useState(searchParams.get('search') ?? '');
+    const debouncedValue = useDebounce<string>(searchText, 500)
 
     const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
         setSearchText(e.target.value);
+    }
 
+    useEffect(() => {
         const params = new URLSearchParams(searchParams); // take old search params
-        params.set('search', e.target.value); // and change value of the tag filter
+        params.set('search', searchText); // and change the value of the tag filter
 
         router.push(`/?${params}`);
-    }
+    }, [debouncedValue])
 
     useEffect(() => {
         const fetchPosts = async () => {
