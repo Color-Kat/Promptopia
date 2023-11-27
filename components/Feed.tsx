@@ -27,7 +27,7 @@ interface FeedProps {
 
 }
 
-export const Feed: FC<FeedProps> = memo(({}) => {
+export const Feed: FC<FeedProps> = ({}) => {
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -40,22 +40,29 @@ export const Feed: FC<FeedProps> = memo(({}) => {
         setSearchText(e.target.value);
     }
 
+    const fetchPosts = async (tag: string, search: string) => {
+        const response = await fetch('/api/prompt', {
+            method: 'POST',
+            body: JSON.stringify({
+                tag,
+                search
+            })
+        });
+        const data = await response.json();
+
+        setPosts(data);
+    }
+
     useEffect(() => {
         const params = new URLSearchParams(searchParams); // take old search params
         params.set('search', searchText); // and change the value of the tag filter
 
-        router.push(`/?${params}`);
+        fetchPosts(params.get('tag') ?? '', params.get('search') ?? '');
+        router.replace('/?' + params);
     }, [debouncedValue])
 
     useEffect(() => {
-        const fetchPosts = async () => {
-            const response = await fetch('/api/prompt');
-            const data = await response.json();
-
-            setPosts(data);
-        }
-
-        fetchPosts();
+        fetchPosts(searchParams.get('tag') ?? '', searchParams.get('search') ?? '');
     }, []);
 
     return (
@@ -79,4 +86,4 @@ export const Feed: FC<FeedProps> = memo(({}) => {
             />
         </section>
     );
-});
+};
