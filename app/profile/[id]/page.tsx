@@ -48,7 +48,7 @@ const UserProfile: NextPage<{params: {id: string}}> = ({params}) => {
     return (
         <Profile
             name={user.username}
-            description="Epolore prompts of this user to get inspiration!"
+            description={`Welcome to ${user.username}'s personalized profile page. Explore ${user.username}'s exceptional prompts and be inspired by the power of their imagination`}
             posts={posts}
         />
     );

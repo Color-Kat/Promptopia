@@ -1,13 +1,12 @@
 import {connectToDB} from "@/utilsdatabase";
 import Prompt from "@models/prompt";
-import {NextApiHandler, NextApiRequest} from "next";
-import {getSession, useSession} from "next-auth/react";
-import {getServerSession} from "next-auth";
+import {NextApiRequest} from "next";
+import {NextRequest} from "next/server";
 
 
 // GET (read)
 export const GET = async (
-    req: NextApiRequest,
+    req: Request | NextRequest,
     {params}: {params: {id: string}}
 ) => {
     try {
@@ -32,7 +31,7 @@ export const GET = async (
 
 // PATCH (update)
 export const PATCH = async (
-    req: Request & NextApiRequest,
+    req: Request | NextRequest,
     {params}: {params: {id: string}}
 ) => {
     const {prompt, tag} = await req.json();
@@ -61,7 +60,7 @@ export const PATCH = async (
 
 // DELETE (delete)
 export const DELETE = async (
-    req: NextApiRequest,
+    req: Request | NextRequest,
     {params}: {params: {id: string}}
 ) => {
     try {

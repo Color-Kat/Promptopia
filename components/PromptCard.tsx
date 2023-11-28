@@ -11,7 +11,7 @@ interface PromptCardProps {
     post: IPost;
     handleEdit?: () => void;
     handleDelete?: () => void;
-    setSearchText: (text: string) => void
+    setSearchText?: (text: string) => void
 }
 
 export const PromptCard: FC<PromptCardProps> = memo(({
@@ -41,7 +41,7 @@ export const PromptCard: FC<PromptCardProps> = memo(({
         //
         // router.push(`/?${params}`);
 
-        setSearchText(post.tag);
+        setSearchText && setSearchText(post.tag);
     }, []);
 
     return (

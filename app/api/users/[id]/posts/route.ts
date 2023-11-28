@@ -1,9 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import {connectToDB} from "@/utilsdatabase";
 import Prompt from "@models/prompt";
+import {NextRequest} from "next/server";
 
 export const GET = async (
-    request: Request,
+    request: Request | NextRequest,
     {params}: {params: {id: string}}
 ) => {
     try {

@@ -2,13 +2,14 @@ import {connectToDB} from "@/utilsdatabase";
 import Prompt from "@models/prompt";
 import {NextApiRequest} from "next";
 import User from "@models/user";
+import {NextRequest} from "next/server";
 
 function escapeRegExp(string: string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
 
 export const POST = async (
-    request: Request & NextApiRequest
+    request: Request | NextRequest
 ) => {
     try {
         await connectToDB();
@@ -23,8 +24,8 @@ export const POST = async (
             : null;
 
         // Create a query for filtering prompts
-        if (tag !== '') query.$or.push({tag});
         if (search !== '') query.$or.push({tag: { $regex: '.*' + escapeRegExp(search) + '.*', $options: 'i'}});
+        if (search !== '') query.$or.push({prompt: { $regex: '.*' + escapeRegExp(search) + '.*', $options: 'i'}});
         if (user) query.$or.push({creator: user?._id});
 
         // Clear $or...

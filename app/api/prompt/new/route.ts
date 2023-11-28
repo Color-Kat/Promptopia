@@ -1,14 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import {connectToDB} from "@/utilsdatabase";
 import Prompt from "@models/prompt";
+import {NextRequest} from "next/server";
 
 type ResponseData = {
 
 }
 
 export const POST = async (
-    req: Request,
-    res: NextApiResponse<ResponseData>
+    req: Request | NextRequest
 ) => {
     const {userId, prompt, tag} = await req.json();
 
