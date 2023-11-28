@@ -65,6 +65,12 @@ export const Feed: FC<FeedProps> = ({}) => {
         fetchPosts(searchParams.get('tag') ?? '', searchParams.get('search') ?? '');
     }, []);
 
+    if(posts.length === 0) return (
+        <section className="flex-center h-96">
+            <h1 className="text-2xl font-bold text-center">No posts found <br/>by this filters</h1>
+        </section>
+    );
+
     return (
         <section className="feed">
             <form

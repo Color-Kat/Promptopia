@@ -1,6 +1,7 @@
 import {connectToDB} from "@/utilsdatabase";
 import Prompt from "@models/prompt";
 import {NextApiRequest} from "next";
+import User from "@models/user";
 
 export const POST = async (
     request: Request & NextApiRequest
@@ -10,21 +11,16 @@ export const POST = async (
 
         const {tag, search} = await request.json();
 
-        // Search Params
-        // const searchParams = request.query;
-        // const tag = 123;
-        // const search = searchParams;
-        //
-        console.log(tag, search)
-
         let query: any = {};
 
-        if (tag !== '') query.tag = tag;
-        // if (search !== '') query['creator.username'] = {
-        //     $regex: '.*' + search + '.*'
-        // }
+        // Get user from search
+        const user = search
+            ? await User.findOne({ username: { $regex: '.*' +search + '.*', $options: 'i'} })
+            : null;
 
-        console.log(query)
+        // Create a query for filtering prompts
+        if (tag !== '') query.tag = tag;
+        if (search) query['creator'] = user?._id;
 
         const prompts = await Prompt
             .find(query)
