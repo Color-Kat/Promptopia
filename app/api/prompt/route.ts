@@ -3,6 +3,10 @@ import Prompt from "@models/prompt";
 import {NextApiRequest} from "next";
 import User from "@models/user";
 
+function escapeRegExp(string: string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+
 export const POST = async (
     request: Request & NextApiRequest
 ) => {
@@ -11,16 +15,20 @@ export const POST = async (
 
         const {tag, search} = await request.json();
 
-        let query: any = {};
+        let query: any = {$or: []};
 
         // Get user from search
         const user = search
-            ? await User.findOne({ username: { $regex: '.*' +search + '.*', $options: 'i'} })
+            ? await User.findOne({ username: { $regex: '.*' + escapeRegExp(search) + '.*', $options: 'i'} })
             : null;
 
         // Create a query for filtering prompts
-        if (tag !== '') query.tag = tag;
-        if (search) query['creator'] = user?._id;
+        if (tag !== '') query.$or.push({tag});
+        if (search !== '') query.$or.push({tag: { $regex: '.*' + escapeRegExp(search) + '.*', $options: 'i'}});
+        if (user) query.$or.push({creator: user?._id});
+
+        // Clear $or...
+        if(query.$or.length === 0) delete query.$or;
 
         const prompts = await Prompt
             .find(query)

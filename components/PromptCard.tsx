@@ -11,12 +11,14 @@ interface PromptCardProps {
     post: IPost;
     handleEdit?: () => void;
     handleDelete?: () => void;
+    setSearchText: (text: string) => void
 }
 
 export const PromptCard: FC<PromptCardProps> = memo(({
                                                          post,
                                                          handleEdit,
-                                                         handleDelete
+                                                         handleDelete,
+                                                         setSearchText
                                                      }) => {
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -34,10 +36,12 @@ export const PromptCard: FC<PromptCardProps> = memo(({
     }
 
     const handleTagClick = useCallback(() => {
-        const params = new URLSearchParams(searchParams); // take old search params
-        params.set('tag', post.tag); // and change value of the tag filter
+        // const params = new URLSearchParams(searchParams); // take old search params
+        // params.set('tag', post.tag); // and change value of the tag filter
+        //
+        // router.push(`/?${params}`);
 
-        router.push(`/?${params}`);
+        setSearchText(post.tag);
     }, []);
 
     return (

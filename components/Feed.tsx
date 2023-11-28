@@ -7,15 +7,25 @@ import {useRouter, useSearchParams} from "next/navigation";
 import {useDebounce} from "@/hooks/useDebounce";
 
 const PromptCardList: FC<{
-    posts: IPost[]
+    posts: IPost[],
+    setSearchText: (text: string) => void
 }> = ({
-          posts
+          posts,
+          setSearchText
       }) => {
+
+    if (posts.length === 0) return (
+        <section className="flex-center h-96">
+            <h1 className="text-2xl font-bold text-center">No posts found <br/>by this filters</h1>
+        </section>
+    );
+
     return (
         <div className="mt-16 prompt_layout">
             {posts.map(post => (
                 <PromptCard
                     post={post}
+                    setSearchText={setSearchText}
                     key={post._id}
                 />
             ))}
@@ -65,12 +75,6 @@ export const Feed: FC<FeedProps> = ({}) => {
         fetchPosts(searchParams.get('tag') ?? '', searchParams.get('search') ?? '');
     }, []);
 
-    if(posts.length === 0) return (
-        <section className="flex-center h-96">
-            <h1 className="text-2xl font-bold text-center">No posts found <br/>by this filters</h1>
-        </section>
-    );
-
     return (
         <section className="feed">
             <form
@@ -89,6 +93,7 @@ export const Feed: FC<FeedProps> = ({}) => {
 
             <PromptCardList
                 posts={posts}
+                setSearchText={setSearchText}
             />
         </section>
     );
