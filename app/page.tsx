@@ -1,5 +1,6 @@
 import {NextPage} from 'next';
 import {Feed} from "@components/Feed";
+import {Suspense} from "react";
 
 const Home: NextPage = ({}) => {
 
@@ -15,7 +16,9 @@ const Home: NextPage = ({}) => {
                 Promptopia is an open-source AI prompting tool for modern world to discover, create and share creative prompts
             </p>
 
-            <Feed />
+            <Suspense fallback={<>Загрузка...</>}>
+                <Feed />
+            </Suspense>
         </section>
     );
 };

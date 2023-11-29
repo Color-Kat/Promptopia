@@ -5,7 +5,6 @@ import {Profile} from "@components/Profile";
 import {useEffect, useState} from "react";
 import {IUser} from "@/types/IUser";
 import {IPost} from "@/types/IPost";
-import {useRouter, useSearchParams} from "next/navigation";
 
 const UserProfile: NextPage<{params: {id: string}}> = ({params}) => {
     const userId = params.id;

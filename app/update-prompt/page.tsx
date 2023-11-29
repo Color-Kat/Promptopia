@@ -6,7 +6,6 @@ import {Form} from "@components/Form";
 import {FormEvent, useEffect, useState} from "react";
 import {IPost} from "@/types/IPost";
 import {useSession} from "next-auth/react";
-import prompt from "@models/prompt";
 
 const UpdatePrompt: NextPage = ({}) => {
     const promptId = useSearchParams().get('id');

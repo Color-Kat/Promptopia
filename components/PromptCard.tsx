@@ -4,7 +4,7 @@ import React, {memo, FC, useState, useCallback} from 'react';
 import {IPost} from "@/types/IPost";
 import Image from "next/image";
 import {useSession} from "next-auth/react";
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import {usePathname} from "next/navigation";
 import Link from "next/link";
 
 interface PromptCardProps {
@@ -20,8 +20,6 @@ export const PromptCard: FC<PromptCardProps> = memo(({
                                                          handleDelete,
                                                          setSearchText
                                                      }) => {
-    const router = useRouter();
-    const searchParams = useSearchParams();
 
     const {data: session} = useSession();
     const pathname = usePathname();
