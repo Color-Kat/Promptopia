@@ -1,11 +1,12 @@
 import React, {memo, FC, Dispatch, SetStateAction, FormEvent} from 'react';
-import {IPost} from "@/types/IPost";
+import {IPost, IPostForm} from "@/types/IPost";
 import Link from "next/link";
+import {ImageInput} from "@components/ImageInput";
 
 interface FormProps {
     type: 'Create' | 'Edit';
-    post: Pick<IPost, 'prompt' | 'tag'>;
-    setPost: Dispatch<SetStateAction<Pick<IPost, 'prompt' | 'tag'>>>;
+    post: IPostForm;
+    setPost: Dispatch<SetStateAction<IPostForm>>;
     submitting: boolean;
     handleSubmit: (e: FormEvent<HTMLFormElement>) => void
 
@@ -18,10 +19,10 @@ export const Form: FC<FormProps> = memo(({
                                              submitting,
                                              handleSubmit
                                          }) => {
-
+    console.log(post);
 
     return (
-        <section className="w-full max-w-full flex-start flex-col">
+        <section className="w-full max-w-full flex-start flex-col pb-16">
             <h1 className="head_text text-right">
                 <span className="blue_gradient">{type} Post</span>
             </h1>
@@ -34,6 +35,11 @@ export const Form: FC<FormProps> = memo(({
                 onSubmit={handleSubmit}
                 className="mt-10 w-full max-w-2xl flex flex-col gap-7 glassmorphism"
             >
+                <ImageInput
+                    data={post}
+                    setData={setPost}
+                />
+
                 {/* Prompt */}
                 <label>
                     <span className="font-satoshi font-semibold text-base text-gray-700">
