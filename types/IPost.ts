@@ -2,7 +2,7 @@ import {IUser} from "@/types/IUser";
 
 export interface IPost {
     _id: string;
-    images: any[];
+    image: string;
     prompt: string;
     tag: string;
 
@@ -10,5 +10,5 @@ export interface IPost {
 }
 
 export type IPostForm = Pick<IPost, 'prompt' | 'tag'> & {
-    images: FileList;
+    image: FileList[0] | null;
 };

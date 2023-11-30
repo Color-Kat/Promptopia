@@ -6,6 +6,7 @@ import {Form} from "@components/Form";
 import {FormEvent, useState} from "react";
 import {IPost, IPostForm} from "@/types/IPost";
 import {useSession} from "next-auth/react";
+import {formFata} from "@/utilsformFata";
 
 const CreatePrompt: NextPage = ({}) => {
     const {data: session} = useSession();
@@ -13,7 +14,7 @@ const CreatePrompt: NextPage = ({}) => {
 
     const [submitting, setSubmitting] = useState(false);
     const [post, setPost] = useState<IPostForm>({
-        images: [],
+        image: null,
         prompt: "",
         tag: "",
     });
@@ -25,7 +26,8 @@ const CreatePrompt: NextPage = ({}) => {
         try {
             const response = await fetch('/api/prompt/new', {
                 method: 'POST',
-                body: JSON.stringify({
+                body: formFata({
+                    image: post.image,
                     prompt: post.prompt,
                     tag: post.tag,
                     userId: session?.user.id

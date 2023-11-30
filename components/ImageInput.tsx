@@ -39,7 +39,7 @@ export const ImageInput: FC<ImageInputProps> = memo(({data, setData}) => {
             // At least one file has been dropped
             setData(prev => ({
                 ...prev,
-                images: e.dataTransfer.files // dataTransfer - for drag and drop
+                image: e.dataTransfer.files[0] // dataTransfer - for drag and drop
             }));
         }
     };
@@ -51,16 +51,16 @@ export const ImageInput: FC<ImageInputProps> = memo(({data, setData}) => {
             // At least one file has been selected
             setData(prev => ({
                 ...prev,
-                images: e.target.files
+                image: e.target.files[0]
             }));
         }
     };
 
     const [uploadedImage, setUploadedImage] = React.useState<string>('');
     useEffect(() => {
-        if(data.images[0])
-            setUploadedImage(URL.createObjectURL(data.images[0]));
-    }, [data.images]);
+        if(data.image)
+            setUploadedImage(URL.createObjectURL(data.image));
+    }, [data.image]);
 
     return (
         <div
@@ -100,7 +100,7 @@ export const ImageInput: FC<ImageInputProps> = memo(({data, setData}) => {
                         className="font-semibold">Click to upload</span> or drag and drop</p>
                     <p className="text-xs">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
 
-                    <p className="text-base mt-5">{data.images[0]?.name}</p>
+                    <p className="text-base mt-5">{data.image?.name}</p>
                 </div>
                 <input
                     id="dropzone-file"

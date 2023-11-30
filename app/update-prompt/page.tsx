@@ -4,7 +4,7 @@ import {NextPage} from 'next';
 import {useRouter, useSearchParams} from "next/navigation";
 import {Form} from "@components/Form";
 import {FormEvent, useEffect, useState} from "react";
-import {IPost} from "@/types/IPost";
+import {IPost, IPostForm} from "@/types/IPost";
 import {useSession} from "next-auth/react";
 
 const UpdatePrompt: NextPage = ({}) => {
@@ -14,7 +14,8 @@ const UpdatePrompt: NextPage = ({}) => {
     const router = useRouter();
 
     const [submitting, setSubmitting] = useState(false);
-    const [post, setPost] = useState<Pick<IPost, 'prompt' | 'tag'>>({
+    const [post, setPost] = useState<IPostForm>({
+        image: null,
         prompt: "",
         tag: "",
     });
@@ -25,6 +26,7 @@ const UpdatePrompt: NextPage = ({}) => {
             const data = await response.json();
 
             setPost({
+                image: data.image ?? [],
                 prompt: data.prompt,
                 tag: data.tag,
             });
