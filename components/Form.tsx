@@ -19,8 +19,6 @@ export const Form: FC<FormProps> = memo(({
                                              submitting,
                                              handleSubmit
                                          }) => {
-    console.log(post);
-
     return (
         <section className="w-full max-w-full flex-start flex-col pb-16">
             <h1 className="head_text text-right">

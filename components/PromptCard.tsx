@@ -34,17 +34,20 @@ export const PromptCard: FC<PromptCardProps> = memo(({
     }
 
     const handleTagClick = useCallback(() => {
-        // const params = new URLSearchParams(searchParams); // take old search params
-        // params.set('tag', post.tag); // and change value of the tag filter
-        //
-        // router.push(`/?${params}`);
-
         setSearchText && setSearchText(post.tag);
     }, []);
 
     return (
-        <div className="prompt_card">
-            <div className="flex justify-between items-start gap-5">
+        <div className="prompt_card pb-4">
+            {post.image &&  <Image
+                src={post.image}
+                alt={post.tag}
+                width={580}
+                height={480}
+                className="mb-3 rounded-md"
+            />}
+
+            <div className="flex justify-between items-start gap-5 px-6">
                 {post.creator &&
                     <Link href={`/profile/${post.creator._id}`}>
                     <div
@@ -83,12 +86,12 @@ export const PromptCard: FC<PromptCardProps> = memo(({
                 </div>
             </div>
 
-            <p className="my-4 font-satoshi text-gray-700">
+            <p className="my-4 font-satoshi text-gray-700 px-6">
                 {post.prompt}
             </p>
 
             <p
-                className="font-inter text-sm blue_gradient cursor-pointer"
+                className="font-inter text-sm blue_gradient cursor-pointer px-6"
                 onClick={handleTagClick}
             >
                 #{post.tag}
@@ -96,7 +99,7 @@ export const PromptCard: FC<PromptCardProps> = memo(({
 
             {/* User action buttons */}
             {session?.user.id === post.creator?._id && pathname == '/profile' &&(
-                <div className="mt-5 flex-center gap-4 border-t border-gray-200 pt-3">
+                <div className="mt-5 flex-center gap-4 border-t border-gray-200 pt-3 px-6">
                     <p
                         className="font-inter text-sm green_gradient cursor-pointer"
                         onClick={handleEdit}

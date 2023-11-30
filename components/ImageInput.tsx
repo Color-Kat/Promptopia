@@ -56,9 +56,12 @@ export const ImageInput: FC<ImageInputProps> = memo(({data, setData}) => {
         }
     };
 
-    const [uploadedImage, setUploadedImage] = React.useState<string>('');
+    const [uploadedImage, setUploadedImage] = React.useState<string>();
     useEffect(() => {
-        if(data.image)
+        if(!data.image) return;
+        if(typeof data.image == 'string')
+            setUploadedImage(data.image);
+        else
             setUploadedImage(URL.createObjectURL(data.image));
     }, [data.image]);
 
@@ -98,7 +101,7 @@ export const ImageInput: FC<ImageInputProps> = memo(({data, setData}) => {
                     </svg>
                     <p className="mb-2 text-sm"><span
                         className="font-semibold">Click to upload</span> or drag and drop</p>
-                    <p className="text-xs">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                    <p className="text-xs">SVG, PNG, JPG or GIF</p>
 
                     <p className="text-base mt-5">{data.image?.name}</p>
                 </div>

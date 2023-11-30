@@ -2,6 +2,8 @@ import {connectToDB} from "@/utilsdatabase";
 import Prompt from "@models/prompt";
 import {NextApiRequest} from "next";
 import {NextRequest} from "next/server";
+import {writeFile} from "fs/promises";
+import path from "path";
 
 
 // GET (read)
@@ -34,9 +36,27 @@ export const PATCH = async (
     req: Request | NextRequest,
     {params}: {params: {id: string}}
 ) => {
-    const {prompt, tag} = await req.json();
-
     try {
+        const formData = await req.formData();
+
+        // Get image file or previous path
+        const image: FileList[0] | string = formData.get('image') as any;
+        let filepath = '';
+
+        if (image && typeof image !== 'string' && (image as any) !== 'null') {
+            // Image is a new file, save it
+            const buffer = Buffer.from(await image.arrayBuffer());
+            const filename = Date.now() + image.name.replaceAll(" ", "_");
+            filepath = "/uploads/prompts/" + filename;
+
+            await writeFile(
+                path.join(process.cwd(), "public/uploads/prompts/" + filename),
+                buffer
+            );
+        } else if(image && typeof image === 'string' && image !== 'null') {
+            filepath = image; // Image is previous path
+        }
+
         await connectToDB();
 
         const existingPrompt = await Prompt.findOne({
@@ -46,8 +66,9 @@ export const PATCH = async (
 
         if(!existingPrompt) return new Response('Prompt not found', {status: 404});
 
-        existingPrompt.prompt = prompt;
-        existingPrompt.tag = tag;
+        existingPrompt.prompt = formData.get('prompt');
+        existingPrompt.tag = formData.get('tag');
+        existingPrompt.image = filepath;
 
         await existingPrompt.save();
 

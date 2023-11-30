@@ -1,4 +1,3 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
 import {connectToDB} from "@/utilsdatabase";
 import Prompt from "@models/prompt";
 import {NextRequest} from "next/server";
@@ -12,17 +11,18 @@ type ResponseData = {
 export const POST = async (
     req: Request | NextRequest
 ) => {
-    const formData = await req.formData();
-
     try {
+        const formData = await req.formData();
+
         await connectToDB();
 
         const image: FileList[0] = formData.get('image') as any;
-        let filename = '';
+        let filepath = '';
 
-        if (image) {
+        if (image && (image as any) !== 'null') {
             const buffer = Buffer.from(await image.arrayBuffer());
-            filename = Date.now() + image.name.replaceAll(" ", "_");
+            const filename = Date.now() + image.name.replaceAll(" ", "_");
+            filepath = "/uploads/prompts/" + filename;
 
             await writeFile(
                 path.join(process.cwd(), "public/uploads/prompts/" + filename),
@@ -34,7 +34,7 @@ export const POST = async (
             creator: formData.get('userId'),
             tag: formData.get('tag'),
             prompt: formData.get('prompt'),
-            image: filename
+            image: filepath
         });
 
         await newPrompt.save();

@@ -7,6 +7,9 @@ import {FormEvent, useState} from "react";
 import {IPost, IPostForm} from "@/types/IPost";
 import {useSession} from "next-auth/react";
 import {formFata} from "@/utilsformFata";
+import {writeFile} from "fs/promises";
+import path from "path";
+import Prompt from "@models/prompt";
 
 const CreatePrompt: NextPage = ({}) => {
     const {data: session} = useSession();
@@ -24,6 +27,7 @@ const CreatePrompt: NextPage = ({}) => {
         setSubmitting(true);
 
         try {
+
             const response = await fetch('/api/prompt/new', {
                 method: 'POST',
                 body: formFata({

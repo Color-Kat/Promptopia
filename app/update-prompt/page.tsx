@@ -6,6 +6,7 @@ import {Form} from "@components/Form";
 import {FormEvent, useEffect, useState} from "react";
 import {IPost, IPostForm} from "@/types/IPost";
 import {useSession} from "next-auth/react";
+import {formFata} from "@/utilsformFata";
 
 const UpdatePrompt: NextPage = ({}) => {
     const promptId = useSearchParams().get('id');
@@ -26,7 +27,7 @@ const UpdatePrompt: NextPage = ({}) => {
             const data = await response.json();
 
             setPost({
-                image: data.image ?? [],
+                image: data.image ?? '',
                 prompt: data.prompt,
                 tag: data.tag,
             });
@@ -44,7 +45,8 @@ const UpdatePrompt: NextPage = ({}) => {
         try {
             const response = await fetch(`/api/prompt/${promptId}`, {
                 method: 'PATCH',
-                body: JSON.stringify({
+                body: formFata({
+                    image: post.image,
                     prompt: post.prompt,
                     tag: post.tag,
                 })
